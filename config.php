@@ -9,7 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !hash_equals($_SESSION['t'], $_POST
 
 function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES); }
 function csrf() { return '<input type="hidden" name="t" value="' . $_SESSION['t'] . '">'; }
-function rp($n) { return 'Rp' . number_format($n, 0, ',', '.'); }
+function rp($n) { return 'Rp ' . number_format($n, 0, ',', '.'); }
+function rpa($n) { return '<div class="d-flex justify-content-between"><span>Rp</span><span>' . number_format($n, 0, ',', '.') . '</span></div>'; }
 function go($url) { header("Location: $url"); exit; }
 function user() { return $_SESSION['user'] ?? null; }
 function q($sql, $p = []) { global $db; $s = $db->prepare($sql); $s->execute($p); return $s; }
