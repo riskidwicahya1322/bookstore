@@ -7,10 +7,10 @@ if (isset($_POST['add'])) {
     $c[(int)$_POST['add']] = ($c[(int)$_POST['add']] ?? 0) + 1;
     go($_SERVER['HTTP_REFERER'] ?? 'index.php');
 }
-if (isset($_POST['qty'])) {
-    foreach ($_POST['qty'] as $id => $n) {
-        if ((int)$n > 0) $c[(int)$id] = (int)$n; else unset($c[(int)$id]);
-    }
+if (isset($_POST['step'])) {
+    [$id, $d] = explode(':', $_POST['step'] . ':0');
+    $n = ($c[(int)$id] ?? 0) + (int)$d;
+    if ($n > 0) $c[(int)$id] = $n; else unset($c[(int)$id]);
     go('cart.php');
 }
 
@@ -36,18 +36,22 @@ require 'header.php';
 <?php else: ?>
   <form method="post"><?= csrf() ?>
     <table class="table">
-      <tr><th>Buku</th><th>Harga</th><th width="110">Jumlah</th><th>Subtotal</th></tr>
+      <tr><th>Buku</th><th width="150">Harga</th><th width="230">Jumlah</th><th width="150">Subtotal</th></tr>
       <?php foreach ($rows as $b): ?>
         <tr>
           <td><?= e($b['title']) ?></td>
-          <td><?= rp($b['price']) ?></td>
-          <td><input class="form-control form-control-sm" type="number" min="0" name="qty[<?= $b['id'] ?>]" value="<?= $c[$b['id']] ?>"></td>
-          <td><?= rp($b['price'] * $c[$b['id']]) ?></td>
+          <td><?= rpa($b['price']) ?></td>
+          <td class="text-nowrap">
+            <button class="btn btn-sm btn-outline-secondary" name="step" value="<?= $b['id'] ?>:-1">&minus;</button>
+            <span class="mx-2"><?= $c[$b['id']] ?></span>
+            <button class="btn btn-sm btn-outline-secondary" name="step" value="<?= $b['id'] ?>:1">+</button>
+            <button class="btn btn-sm btn-outline-danger ms-2" name="step" value="<?= $b['id'] ?>:-999">Hapus</button>
+          </td>
+          <td><?= rpa($b['price'] * $c[$b['id']]) ?></td>
         </tr>
       <?php endforeach ?>
-      <tr><th colspan="3">Total</th><th><?= rp($total) ?></th></tr>
+      <tr><th colspan="3">Total</th><th><?= rpa($total) ?></th></tr>
     </table>
-    <button class="btn btn-outline-secondary">Perbarui (isi 0 untuk hapus)</button>
   </form>
 
   <h5 class="mt-4">Data pengiriman (bayar di tempat)</h5>
