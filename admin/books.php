@@ -24,10 +24,10 @@ require '../header.php';
   <div class="col-md-2"><button class="btn btn-primary w-100"><?= $b['id'] ? 'Simpan' : 'Tambah' ?></button></div>
 </form>
 <table class="table">
-  <tr><th>Judul</th><th>Penulis</th><th>Kategori</th><th>Harga</th><th></th></tr>
+  <tr><th>Judul</th><th>Penulis</th><th>Kategori</th><th width="150">Harga</th><th></th></tr>
   <?php foreach (q('SELECT b.*, c.name category FROM books b JOIN categories c ON c.id = b.category_id ORDER BY b.id') as $x): ?>
     <tr>
-      <td><?= e($x['title']) ?></td><td><?= e($x['author']) ?></td><td><?= e($x['category']) ?></td><td><?= rp($x['price']) ?></td>
+      <td><?= e($x['title']) ?></td><td><?= e($x['author']) ?></td><td><?= e($x['category']) ?></td><td><?= rpa($x['price']) ?></td>
       <td class="text-nowrap">
         <a class="btn btn-sm btn-outline-secondary" href="?edit=<?= $x['id'] ?>">Ubah</a>
         <form method="post" class="d-inline" onsubmit="return confirm('Hapus buku ini?')"><?= csrf() ?>
